@@ -3,8 +3,7 @@ require 'xmpp4r/client'
 
 class XMPPNotificator
 	@@client = nil
-	@@subject_tpl = nil
-	@@body_tpl = nil
+	@@tpl = {}
 		
 	def initialize(opts)
 		@jid = Jabber::JID.new(opts)
@@ -12,8 +11,8 @@ class XMPPNotificator
 	
 	def notify!(data)
 		# prepare message
-		subject = self.class.get_subject_tpl.result(binding)
-		body = self.class.get_body_tpl.result(binding)
+		subject = self.class.get_tpl(:subject, 'xmpp-subject.plain.erb').result(binding)
+		body = self.class.get_tpl(:body, 'xmpp-body.plain.erb').result(binding)
 		m = Jabber::Message.new(@jid, body)
 		m.type = :normal
 		m.subject = subject
@@ -63,38 +62,21 @@ class XMPPNotificator
 		@@client
 	end
 	
-	def self.get_subject_tpl
-		if @@subject_tpl.nil?
-			@@subject_tpl = WCC::Prog.load_template('xmpp-subject.plain.erb')
-			if @@subject_tpl.nil?
-				src_path = Pathname.new(__FILE__) + "../../assets/template.d/xmpp-subject.plain.erb"
+	def self.get_tpl(id, name)
+		if @@tpl[id].nil?
+			@@tpl[id] = WCC::Prog.load_template(name)
+			if @@tpl[id].nil?
+				src_path = Pathname.new(__FILE__) + "../../assets/template.d/#{name}"
 				t = File.open(src_path, 'r') { |f| f.read }
-				WCC::Prog.save_template('xmpp-subject.plain.erb', t)
+				WCC::Prog.save_template(name, t)
 				# retry load
-				@@subject_tpl = WCC::Prog.load_template('xmpp-subject.plain.erb')
+				@@tpl[id] = WCC::Prog.load_template(name)
 			end
-			if @@subject_tpl.nil?
-				@@subject_tpl = ERB.new("ERROR LOADING TEMPLATE 'xmpp-subject.plain.erb'!", 0, "<>")
+			if @@tpl[id].nil?
+				@@tpl[id] = ERB.new("ERROR LOADING TEMPLATE '#{name}'!", 0, "<>")
 			end
 		end
-		@@subject_tpl
-	end
-	
-	def self.get_body_tpl
-		if @@body_tpl.nil?
-			@@body_tpl = WCC::Prog.load_template('xmpp-body.plain.erb')
-			if @@body_tpl.nil?
-				src_path = Pathname.new(__FILE__) + "../../assets/template.d/xmpp-body.plain.erb"
-				t = File.open(src_path, 'r') { |f| f.read }
-				WCC::Prog.save_template('xmpp-body.plain.erb', t)
-				# retry load
-				@@body_tpl = WCC::Prog.load_template('xmpp-body.plain.erb')
-			end
-			if @@body_tpl.nil?
-				@@body_tpl = ERB.new("ERROR LOADING TEMPLATE 'xmpp-body.plain.erb'!", 0, "<>")
-			end
-		end
-		@@body_tpl
+		@@tpl[id]
 	end
 end
 

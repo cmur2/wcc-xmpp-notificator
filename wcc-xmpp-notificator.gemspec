@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
 	s.name		= "wcc-xmpp-notificator"
 	s.version	= "0.0.1"
-	s.summary	= ""
+	s.summary	= "XMPP/Jabber notificator plugin for wcc"
 	s.author	= "Christian Nicolai"
 	s.email		= "chrnicolai@gmail.com"
 	s.homepage	= "https://github.com/cmur2/wcc-xmpp-notificator"
