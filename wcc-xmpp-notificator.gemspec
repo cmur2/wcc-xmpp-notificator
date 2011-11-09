@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
 	
 	s.require_paths = ["lib"]
 	
-	s.add_runtime_dependency "xmpp4r"
+	s.add_runtime_dependency "xmpp4r", "~> 0.5"
 end
