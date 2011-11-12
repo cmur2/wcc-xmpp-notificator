@@ -11,11 +11,9 @@ class XMPPNotificator
 	
 	def notify!(data)
 		# prepare message
-		subject = self.class.get_tpl(:subject, 'xmpp-subject.plain.erb').result(binding)
 		body = self.class.get_tpl(:body, 'xmpp-body.plain.erb').result(binding)
 		m = Jabber::Message.new(@jid, body)
 		m.type = :normal
-		m.subject = subject
 		# send it
 		c = self.class.get_client
 		c.send(m) unless c.nil?
