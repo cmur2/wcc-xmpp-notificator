@@ -1,7 +1,7 @@
 
 Gem::Specification.new do |s|
 	s.name		= "wcc-xmpp-notificator"
-	s.version	= "0.0.1"
+	s.version	= "0.0.2"
 	s.summary	= "XMPP/Jabber notificator plugin for wcc"
 	s.author	= "Christian Nicolai"
 	s.email		= "chrnicolai@gmail.com"
@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
 	s.rubyforge_project = "wcc-xmpp-notificator"
 	
 	s.files = [
-		"assets/template.d/xmpp-subject.plain.erb",
 		"assets/template.d/xmpp-body.plain.erb",
-		"lib/wcc-xmpp-notificator.rb"
+		"lib/wcc-xmpp-notificator.rb",
+		"README.md"
 	]
 	
 	s.require_paths = ["lib"]
